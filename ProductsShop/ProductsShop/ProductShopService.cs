@@ -54,7 +54,7 @@ namespace ProductsShop
                 {
                     if (money < products[choise - 1].GetPrice())
                     {
-                        throw new ArgumentException("У вас недостатньо коштів для покупки!");
+                        throw new ArgumentException("У вас недостатньо коштів для покупки навіть 1 продукта!");
                     }
                     else
                     {
