@@ -18,7 +18,6 @@ namespace ContactBook_V2
 
             bool Running = true;
             bool invalidInput = false;
-            bool firstRun = true;
 
             while (Running)
             {
@@ -33,14 +32,11 @@ namespace ContactBook_V2
 
                 Console.WriteLine("1. Додати контакт");
                 Console.WriteLine("2. Вивести всі контакти");
-                Console.WriteLine("3. Видалити контакт");
-                Console.Write("4. Змінити контакт");
-                if (firstRun)
-                {
-                    Console.Write(" <- New");
-                }
+                Console.WriteLine("3. Вивести контакт");
+                Console.WriteLine("4. Видалити контакт");
+                Console.WriteLine("5. Змінити контакт");
 
-                Console.WriteLine("\nesc. Вийти");
+                Console.WriteLine("esc. Вийти");
                 switch (Console.ReadKey(true).Key)
                 {
                     case ConsoleKey.D1:
@@ -59,23 +55,23 @@ namespace ContactBook_V2
                         ColorText.WriteColorLine("\nНатисніть будь-яку клавішу для повернення до меню.", ConsoleColor.DarkGray);
                         Console.ReadKey(true);
                         break;
-                    case ConsoleKey.D3:
+                        case ConsoleKey.D3:
                         Console.Clear();
-                        ColorText.WriteColorLine("Введіть ім'я контакту для видалення:", ConsoleColor.DarkGray);
-                        string name2 = Console.ReadLine();
-                        contacts.DeleteContact(name2);
+                        ColorText.WriteColorLine("Введіть індекс контакту щоб побачити його:", ConsoleColor.Cyan);
+                        contacts.ShowContact();
                         ColorText.WriteColorLine("\nНатисніть будь-яку клавішу для повернення до меню.", ConsoleColor.DarkGray);
                         Console.ReadKey(true);
                         break;
                     case ConsoleKey.D4:
                         Console.Clear();
-                        ColorText.WriteColorLine("Введіть ім'я контакту для зміни:", ConsoleColor.DarkGray);
-                        string oldName = Console.ReadLine();
-                        ColorText.WriteColorLine("Введіть нове ім'я контакту:", ConsoleColor.Cyan);
-                        string newName = Console.ReadLine();
-                        ColorText.WriteColorLine("Введіть новий номер телефону:", ConsoleColor.Magenta);
-                        string newPhoneNumber = Console.ReadLine();
-                        contacts.ChangeContact(oldName, newName, newPhoneNumber);
+                        ColorText.WriteColorLine("Введіть індекс контакту для видалення:", ConsoleColor.DarkGray);
+                        contacts.DeleteContact();
+                        ColorText.WriteColorLine("\nНатисніть будь-яку клавішу для повернення до меню.", ConsoleColor.DarkGray);
+                        Console.ReadKey(true);
+                        break;
+                    case ConsoleKey.D5:
+                        Console.Clear();
+                        contacts.ChangeContact();
                         ColorText.WriteColorLine("\nНатисніть будь-яку клавішу для повернення до меню.", ConsoleColor.DarkGray);
                         Console.ReadKey(true);
                         break;
@@ -86,7 +82,6 @@ namespace ContactBook_V2
                         invalidInput = true;
                         break;
                 }
-                firstRun = false;
             }
         }
     }

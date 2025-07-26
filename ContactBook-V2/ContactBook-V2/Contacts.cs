@@ -4,22 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using ContactBook_V2;
 
 namespace NotesAndPasswordGenerator
 {
     internal class Contacts
     {
-        private Dictionary<string, string> contacts = new Dictionary<string, string>();
+        private List<Contact> contacts = new List<Contact>();
 
         public void AddContact(string name, string phoneNumber)
         {
-            if (contacts.ContainsKey(name))
+            if (contacts.Any(c => c.Name == name))
             {
                 ColorText.WriteColorLine("Контакт з таким ім'ям вже існує!", ConsoleColor.Red);
             }
             else
             {
-                contacts.Add(name, phoneNumber);
+                contacts.Add(new Contact(name, phoneNumber));
                 ColorText.WriteColorLine("Контакт успішно додано!", ConsoleColor.Green);
             }
         }
@@ -29,50 +30,90 @@ namespace NotesAndPasswordGenerator
             if (contacts.Count < 1)
             {
                 ColorText.WriteColorLine("Контакти відсутні!", ConsoleColor.Red);
-
             }
             else
             {
                  ColorText.WriteColorLine("Список контактів:", ConsoleColor.Yellow);
-                     foreach (KeyValuePair<string,string> kv in contacts)
-                     {
-                         Console.WriteLine(kv.Key + " - " + kv.Value);
-                     }
+                for (int i = 0; i < contacts.Count; i++)
+                {
+                    Console.WriteLine((i + 1) + "." + contacts[i].Name + " - " + contacts[i].PhoneNumber);
+                }
             }
         }
-
-        public void DeleteContact(string name)
+        public void ShowContact()
         {
-            if (contacts.ContainsKey(name))
+            if (int.TryParse(Console.ReadLine(), out int index))
             {
-                Console.WriteLine($"Ви впевнені, що хочете видалити контакт {name}? (y/n)");
-                if (Console.ReadKey().Key == ConsoleKey.Y)
+                index--;
+                if (index >= 0 && index < contacts.Count)
                 {
-                    contacts.Remove(name);
-                    ColorText.WriteColorLine("\nКонтакт успішно видалено!", ConsoleColor.Green);
+                    Console.WriteLine(contacts[index].Name + " - " + contacts[index].PhoneNumber);
                 }
                 else
                 {
-                    ColorText.WriteColorLine("\nВидалення скасовано.", ConsoleColor.Yellow);
+                    ColorText.WriteColorLine("Контакт з таким індексом не знайдено!", ConsoleColor.Red);
                 }
             }
             else
             {
-                ColorText.WriteColorLine("Контакт з таким ім'ям не знайдено!", ConsoleColor.Red);
+                ColorText.WriteColorLine("Ви ввели не число", ConsoleColor.Red);
             }
         }
 
-        public void ChangeContact(string name, string newName, string newPhoneNumber)
+        public void DeleteContact()
         {
-            if (contacts.ContainsKey(name))
+            if (int.TryParse(Console.ReadLine(), out int index))
             {
-                contacts.Remove(name);
-                contacts.Add(newName, newPhoneNumber);
-                ColorText.WriteColorLine("Контакт успішно змінено!", ConsoleColor.Green);
+                index--;
+                if (index >= 0 && index < contacts.Count)
+                {
+                    Console.WriteLine("Контакт: " + contacts[index].Name);
+                    Console.WriteLine($"Ви впевнені, що хочете видалити контакт з індексом {index + 1}? (y/n)");
+                    if (Console.ReadKey().Key == ConsoleKey.Y)
+                    {
+                        contacts.RemoveAt(index);
+                        ColorText.WriteColorLine("\nКонтакт успішно видалено!", ConsoleColor.Green);
+                    }
+                    else
+                    {
+                        ColorText.WriteColorLine("\nВидалення скасовано.", ConsoleColor.Yellow);
+                    }
+                }
+                else
+                {
+                    ColorText.WriteColorLine("Контакт з таким індексом не знайдено!", ConsoleColor.Red);
+                }
             }
             else
             {
-                ColorText.WriteColorLine("Контакт з таким ім'ям не знайдено!", ConsoleColor.Red);
+                ColorText.WriteColorLine("Ви ввели не число", ConsoleColor.Red);
+            }
+            
+        }
+
+        public void ChangeContact()
+        {
+            if (int.TryParse(Console.ReadLine(), out int index))
+            {
+                index--;
+                if (index >= 0 && index < contacts.Count)
+                {
+                    {
+                        ColorText.WriteColorLine("Введіть нове ім'я контакту:", ConsoleColor.Cyan);
+                        contacts[index].Name = Console.ReadLine();
+                        ColorText.WriteColorLine("Введіть новий номер телефону:", ConsoleColor.Magenta);
+                        contacts[index].PhoneNumber = Console.ReadLine();
+                        ColorText.WriteColorLine("Контакт успішно змінено!", ConsoleColor.Green);
+                    }
+                }
+                else
+                {
+                    ColorText.WriteColorLine("Контакт з таким індексом не знайдено!", ConsoleColor.Red);
+                }
+            }
+            else
+            {
+                ColorText.WriteColorLine("Ви ввели не число", ConsoleColor.Red);
             }
         }
 
